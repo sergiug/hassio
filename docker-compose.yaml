@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  hassio:
+    image: homeassistant/armhf-hassio-supervisor
+    container_name: hassio_supervisor
+    privileged: true
+    entrypoint: ["/bin/bash", "-c", "/data/hassio.sh"]
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      - HOMEASSISTANT_REPOSITORY=homeassistant/raspberrypi4-homeassistant
+      #@TODO - avoid hardcoding share absolute path
+      - SUPERVISOR_SHARE=/home/sergiu/home-assistant/hassio
+      - SUPERVISOR_NAME=hassio_supervisor
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
