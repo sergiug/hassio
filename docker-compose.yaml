@@ -12,7 +12,7 @@ services:
     environment:
       - HOMEASSISTANT_REPOSITORY=homeassistant/raspberrypi4-homeassistant
       #@TODO - avoid hardcoding share absolute path
-      - SUPERVISOR_SHARE=/home/sergiu/home-assistant/hassio
+      - SUPERVISOR_SHARE=/home/sergiu/hassio/data
       - SUPERVISOR_NAME=hassio_supervisor
       - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
     volumes:
