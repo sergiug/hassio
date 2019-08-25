@@ -5,6 +5,9 @@ services:
   hassio:
     image: homeassistant/armhf-hassio-supervisor
     container_name: hassio_supervisor
+    depends_on:
+      - influxdb
+      - mariadb
     privileged: true
     entrypoint: ["/bin/bash", "-c", "/data/hassio.sh"]
     security_opt:
@@ -43,6 +46,7 @@ services:
     container_name: grafana
     depends_on:
       - influxdb
+      - mariadb
     environment:
       - TZ=Europe/Bucharest
       - PGID=1000
@@ -69,3 +73,17 @@ services:
     privileged: true
     volumes:
        - ./mysql:/var/lib/mysql
+
+  phpmyadmin:
+      image: jackgruber/phpmyadmin
+      container_name: phpmyadmin
+      environment:
+          - PMA_ARBITRARY=1
+          - PMA_HOST=mariadb
+      restart: always
+      ports:
+          - 8088:80
+      volumes:
+          - /sessions
+      links:
+          - mariadb
