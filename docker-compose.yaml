@@ -53,3 +53,19 @@ services:
     restart: on-failure
     volumes:
       - ./grafana:/var/lib/grafana
+
+
+  mariadb:
+    image: linuxserver/mariadb:latest
+    container_name: mariadb
+    environment:
+       - MYSQL_ROOT_PASSWORD=mysecretpass
+       - MYSQL_DATABASE=home_assistant
+       - MYSQL_USER=hassio
+       - MYSQL_PASSWORD=othersecretpass
+    ports:
+       - 3306:3306
+    user: root
+    privileged: true
+    volumes:
+       - ./mysql:/var/lib/mysql
