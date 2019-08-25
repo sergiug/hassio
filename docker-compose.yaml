@@ -14,8 +14,7 @@ services:
       - seccomp:unconfined
     environment:
       - HOMEASSISTANT_REPOSITORY=homeassistant/raspberrypi4-homeassistant
-      #@TODO - avoid hardcoding share absolute path
-      - SUPERVISOR_SHARE=/home/sergiu/hassio/data
+      - SUPERVISOR_SHARE=${SUPERVISOR_SHARE}
       - SUPERVISOR_NAME=hassio_supervisor
       - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
     volumes:
@@ -32,7 +31,7 @@ services:
       timeout: 1s
       retries: 24
     environment:
-      - TZ=Europe/Bucharest
+      - TZ=${TIMEZONE}
     ports:
       - 8083:8083
       - 8086:8086
@@ -48,7 +47,7 @@ services:
       - influxdb
       - mariadb
     environment:
-      - TZ=Europe/Bucharest
+      - TZ=${TIMEZONE}
       - PGID=1000
       - PUID=1000
     ports:
@@ -63,10 +62,10 @@ services:
     image: linuxserver/mariadb:latest
     container_name: mariadb
     environment:
-       - MYSQL_ROOT_PASSWORD=mysecretpass
-       - MYSQL_DATABASE=home_assistant
-       - MYSQL_USER=hassio
-       - MYSQL_PASSWORD=othersecretpass
+       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+       - MYSQL_DATABASE=${MYSQL_DATABASE}
+       - MYSQL_USER=${MYSQL_USER}
+       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
        - 3306:3306
     user: root
@@ -83,7 +82,5 @@ services:
       restart: always
       ports:
           - 8088:80
-      volumes:
-          - /sessions
       links:
           - mariadb
