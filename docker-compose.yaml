@@ -2,6 +2,21 @@ version: '3'
 
 services:
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - hassio
+      - grafana
+      - phpmyadmin
+    user: root
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/reverse-proxy.conf:/etc/nginx/sites-enabled/reverse-proxy.conf
+    ports:
+      - 443:443
+      - 80:80
+
   hassio:
     image: homeassistant/armhf-hassio-supervisor
     container_name: hassio_supervisor
@@ -50,8 +65,7 @@ services:
       - TZ=${TIMEZONE}
       - PGID=1000
       - PUID=1000
-    ports:
-      - 3000:3000
+      - GF_SERVER_ROOT_URL=http://${SERVER_NAME}/grafana/
     user: root
     restart: on-failure
     volumes:
